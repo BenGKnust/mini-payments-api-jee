@@ -1,7 +1,7 @@
 # Mini Payments API (Jakarta EE)
 
-The same accounts-and-transfers REST API as my Spring Boot version, implemented with
-Jakarta EE (JAX-RS, CDI, JPA) and deployed as a WAR on WildFly.
+A small REST API for accounts and money transfers, built with Jakarta EE (JAX-RS, CDI, JPA)
+and deployed as a WAR on WildFly.
 
 ## Features
 - Create accounts and look them up by ID
@@ -32,10 +32,10 @@ Jakarta EE 10 APIs (JAX-RS, CDI, JPA, Bean Validation, JTA), WildFly, H2, Maven,
 ## Run the tests
 `.\mvnw.cmd test`
 
-## Notes
-- Compared to my Spring Boot version: `@Path`/`@GET` instead of `@RestController`/`@GetMapping`,
-  `@Inject` instead of constructor injection, `EntityManager` instead of `JpaRepository`,
-  `persistence.xml` instead of auto-configuration, and an `ExceptionMapper` instead of `@ResponseStatus`.
+## Design notes
 - Transfers run in a single transaction, so both balance updates succeed or neither does.
 - Balances use `BigDecimal` to avoid rounding errors.
+- Business logic is in `TransferService`, separate from the REST resources and the database access,
+  so it can be unit tested with a mocked repository.
+- Errors are translated to HTTP responses with a JAX-RS `ExceptionMapper`.
 - Known limitation: no locking for concurrent transfers on the same account.
